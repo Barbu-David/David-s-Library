@@ -1,0 +1,550 @@
+type: spec.insomnia.rest/5.0
+name: API
+meta:
+  id: wrk_711c7dbccee348e6846635488b4943de
+  created: 1752661754816
+  modified: 1752661754816
+  description: ""
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_72a0e70f38f801727e5ef35d10c8cdab9b378e69
+    created: 1752661754851
+    modified: 1752661754851
+environments:
+  name: Base Environment
+  meta:
+    id: env_72a0e70f38f801727e5ef35d10c8cdab9b378e69
+    created: 1752661754848
+    modified: 1752661754848
+    isPrivate: false
+spec:
+  contents:
+    openapi: 3.0.4
+    info:
+      title: David's library
+      description: A simple CRUD app for managing my personal library.
+      contact:
+        email: barbu.david.c5a@student.ucv.ro
+      version: 1.0.0
+    servers:
+      - url: http://localhost/8080
+    tags:
+      - name: book
+        description: Operations about books
+      - name: author
+        description: Operations about authors.
+      - name: genre
+        description: Operations about genres
+    paths:
+      /book:
+        post:
+          tags:
+            - book
+          description: Add a new book.
+          operationId: addBook
+          requestBody:
+            description: Provide the book details
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/BookInput"
+            required: true
+          responses:
+            "200":
+              description: Successful operation
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Book"
+            "400":
+              description: Invalid input
+            "500":
+              description: Unexpected error
+        get:
+          tags:
+            - book
+          description: Returns a list of books.
+          operationId: listBooks
+          responses:
+            "200":
+              description: successful operation
+              content:
+                application/json:
+                  schema:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Book"
+            "500":
+              description: Unexpected error
+      /book/{id}:
+        put:
+          tags:
+            - book
+          description: Update an existing book by ID
+          operationId: updateBook
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: integer
+                format: int64
+          requestBody:
+            description: Provide the updated book details
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/BookInput"
+          responses:
+            "200":
+              description: Book updated successfully
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Book"
+            "400":
+              description: Invalid ID supplied
+            "404":
+              description: Book not found
+            "500":
+              description: Unexpected error
+        get:
+          tags:
+            - book
+          description: Returns a single book.
+          operationId: getBookById
+          parameters:
+            - name: id
+              in: path
+              description: ID of book to return
+              required: true
+              schema:
+                type: integer
+                format: int64
+          responses:
+            "200":
+              description: successful operation
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Book"
+            "400":
+              description: Invalid ID supplied
+            "404":
+              description: Book not found
+            "500":
+              description: Unexpected error
+        delete:
+          tags:
+            - book
+          description: Delete a book.
+          operationId: deleteBook
+          parameters:
+            - name: id
+              in: path
+              description: Book id to delete
+              required: true
+              schema:
+                type: integer
+                format: int64
+          responses:
+            "200":
+              description: Book deleted
+            "400":
+              description: Invalid book value
+            "404":
+              description: Book not found
+            "500":
+              description: Unexpected error
+      /book/{id}/cover:
+        get:
+          tags:
+            - book
+          description: Get the book cover as raw PNG
+          operationId: getBookCover
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: integer
+          responses:
+            "200":
+              description: PNG image binary
+              content:
+                image/png:
+                  schema:
+                    type: string
+                    format: binary
+            "404":
+              description: Book not found
+            "500":
+              description: Unexpected error
+        put:
+          tags:
+            - book
+          description: Upload/replace a PNG cover image
+          operationId: updateBookCover
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: integer
+          requestBody:
+            required: true
+            content:
+              image/png:
+                schema:
+                  type: string
+                  format: binary
+          responses:
+            "204":
+              description: Cover image uploaded
+            "404":
+              description: Book not found
+            "500":
+              description: Unexpected error
+      /author:
+        post:
+          tags:
+            - author
+          description: Add a new author.
+          operationId: addAuthor
+          requestBody:
+            description: Provide the author details
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/AuthorInput"
+            required: true
+          responses:
+            "200":
+              description: Successful operation
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Author"
+            "400":
+              description: Invalid input
+            "500":
+              description: Unexpected error
+        get:
+          tags:
+            - author
+          description: Returns a list of authors.
+          operationId: listAuthors
+          responses:
+            "200":
+              description: successful operation
+              content:
+                application/json:
+                  schema:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Author"
+            "500":
+              description: Unexpected error
+      /author/{id}:
+        put:
+          tags:
+            - author
+          description: Update an existing author by ID
+          operationId: updateAuthor
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: integer
+                format: int64
+          requestBody:
+            description: Provide the updated author details
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/AuthorInput"
+          responses:
+            "200":
+              description: Author updated successfully
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Author"
+            "400":
+              description: Invalid ID supplied
+            "404":
+              description: Author not found
+            "500":
+              description: Unexpected error
+        get:
+          tags:
+            - author
+          description: Returns a single author.
+          operationId: getAuthorById
+          parameters:
+            - name: id
+              in: path
+              description: ID of an author to return
+              required: true
+              schema:
+                type: integer
+                format: int64
+          responses:
+            "200":
+              description: successful operation
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Author"
+            "400":
+              description: Invalid ID supplied
+            "404":
+              description: Author not found
+            "500":
+              description: Unexpected error
+        delete:
+          tags:
+            - author
+          description: Delete an author.
+          operationId: deleteAuthor
+          parameters:
+            - name: id
+              in: path
+              description: Author id to delete
+              required: true
+              schema:
+                type: integer
+                format: int64
+          responses:
+            "200":
+              description: Author deleted
+            "400":
+              description: Invalid book value
+            "404":
+              description: Author not found
+            "500":
+              description: Unexpected error
+      /genre:
+        post:
+          tags:
+            - genre
+          description: Add a new genre.
+          operationId: addGenre
+          requestBody:
+            description: Provide the genre details
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/GenreInput"
+            required: true
+          responses:
+            "200":
+              description: Successful operation
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Genre"
+            "400":
+              description: Invalid input
+            "500":
+              description: Unexpected error
+        get:
+          tags:
+            - genre
+          description: Returns a list of genres.
+          operationId: listGenres
+          responses:
+            "200":
+              description: successful operation
+              content:
+                application/json:
+                  schema:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Genre"
+            "500":
+              description: Unexpected error
+      /genre/{id}:
+        put:
+          tags:
+            - genre
+          description: Update an existing genre by ID
+          operationId: updateGenre
+          parameters:
+            - name: id
+              in: path
+              required: true
+              schema:
+                type: integer
+                format: int64
+          requestBody:
+            description: Provide the updated genre details
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/GenreInput"
+          responses:
+            "200":
+              description: Genre updated successfully
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Genre"
+            "400":
+              description: Invalid ID supplied
+            "404":
+              description: Genre not found
+            "500":
+              description: Unexpected error
+        get:
+          tags:
+            - genre
+          description: Returns a single genre.
+          operationId: getGenreById
+          parameters:
+            - name: id
+              in: path
+              description: ID of a genre to return
+              required: true
+              schema:
+                type: integer
+                format: int64
+          responses:
+            "200":
+              description: successful operation
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/Genre"
+            "400":
+              description: Invalid ID supplied
+            "404":
+              description: Genre not found
+            "500":
+              description: Unexpected error
+        delete:
+          tags:
+            - genre
+          description: Delete a genre.
+          operationId: deleteGenre
+          parameters:
+            - name: id
+              in: path
+              description: Genre id to delete
+              required: true
+              schema:
+                type: integer
+                format: int64
+          responses:
+            "200":
+              description: Genre deleted
+            "400":
+              description: Invalid book value
+            "404":
+              description: Genre not found
+            "500":
+              description: Unexpected error
+    components:
+      schemas:
+        BookInput:
+          required:
+            - title
+            - author_id
+            - genres_ids
+          type: object
+          properties:
+            author_id:
+              type: integer
+              format: int64
+              example: 10
+            genres_ids:
+              type: array
+              items:
+                type: integer
+                format: int64
+                example: 10
+              example:
+                - 10
+                - 2
+                - 3
+            page_count:
+              type: integer
+              format: int32
+              example: 10
+            title:
+              type: string
+              example: title
+            description:
+              type: string
+              example: description
+            publication_date:
+              type: string
+              format: date-time
+              example: 1984-07-01T00:00:00Z
+        Book:
+          allOf:
+            - $ref: "#/components/schemas/BookInput"
+            - type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: integer
+                  format: int64
+                  example: 12
+        AuthorInput:
+          type: object
+          required:
+            - name
+            - biography
+          properties:
+            name:
+              type: string
+              example: Author
+            biography:
+              type: string
+              example: Description
+        Author:
+          allOf:
+            - $ref: "#/components/schemas/AuthorInput"
+            - type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: integer
+                  format: int64
+                  example: 1
+        GenreInput:
+          type: object
+          required:
+            - name
+          properties:
+            name:
+              type: string
+              example: Science Fiction
+            parent_id:
+              type: integer
+              format: int64
+              nullable: true
+              example: 3
+        Genre:
+          allOf:
+            - $ref: "#/components/schemas/GenreInput"
+            - type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: integer
+                  format: int64
+                  example: 1
+  meta:
+    id: spc_8adc8ffcdcbe486d8440891076bf27be
+    created: 1752661763569
+    modified: 1752669911594
