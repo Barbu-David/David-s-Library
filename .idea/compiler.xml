@@ -9,9 +9,13 @@
         <module name="libraryManager" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="David-s-Library" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="David-s-Library" options="-parameters" />
       <module name="libraryManager" options="-parameters" />
     </option>
   </component>
